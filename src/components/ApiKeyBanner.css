@@ -1,0 +1,65 @@
+.apibanner {
+  background: rgba(245, 158, 11, 0.1);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.apibanner__inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.apibanner__icon {
+  color: var(--accent-amber);
+  flex-shrink: 0;
+  display: flex;
+}
+
+.apibanner__content {
+  flex: 1;
+  font-size: 0.83rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.apibanner__content strong {
+  color: var(--accent-amber);
+  font-weight: 600;
+}
+
+.apibanner__content code {
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 0.78rem;
+  font-family: 'Courier New', monospace;
+  color: var(--text-primary);
+}
+
+.apibanner__content a {
+  color: var(--accent-amber);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.apibanner__close {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  padding: 4px 6px;
+  border-radius: 4px;
+  transition: var(--transition);
+  flex-shrink: 0;
+}
+
+.apibanner__close:hover {
+  color: var(--text-primary);
+  background: var(--border-subtle);
+}

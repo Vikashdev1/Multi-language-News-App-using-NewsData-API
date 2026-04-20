@@ -1,0 +1,55 @@
+.statsbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 0 10px;
+  flex-wrap: wrap;
+}
+
+.statsbar__count {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.statsbar__num {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.statsbar__label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+.statsbar__filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.statsbar__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-full);
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.statsbar__tag--query {
+  color: var(--accent-primary);
+  border-color: var(--border-strong);
+  background: var(--accent-glow);
+}
