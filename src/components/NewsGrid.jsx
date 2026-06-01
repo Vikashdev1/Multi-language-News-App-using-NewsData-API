@@ -2,7 +2,7 @@ import React from 'react';
 import NewsCard from './NewsCard';
 import './NewsGrid.css';
 
-const NewsGrid = ({ articles, hasMore, loadMore, loading }) => {
+const NewsGrid = ({ articles, hasMore, loadMore, loading, isBookmarked, onToggleBookmark }) => {
   if (!articles.length) return null;
 
   const featured = articles.slice(0, 2);
@@ -14,7 +14,14 @@ const NewsGrid = ({ articles, hasMore, loadMore, loading }) => {
         <section className="news-grid__featured">
           <div className="news-grid__featured-inner">
             {featured.map((article, i) => (
-              <NewsCard key={article.article_id || i} article={article} index={i} featured />
+              <NewsCard
+                key={article.article_id || i}
+                article={article}
+                index={i}
+                featured
+                isBookmarked={isBookmarked?.(article)}
+                onToggleBookmark={onToggleBookmark}
+              />
             ))}
           </div>
         </section>
@@ -23,7 +30,13 @@ const NewsGrid = ({ articles, hasMore, loadMore, loading }) => {
       {rest.length > 0 && (
         <section className="news-grid__regular">
           {rest.map((article, i) => (
-            <NewsCard key={article.article_id || i} article={article} index={i + 2} />
+            <NewsCard
+              key={article.article_id || i}
+              article={article}
+              index={i + 2}
+              isBookmarked={isBookmarked?.(article)}
+              onToggleBookmark={onToggleBookmark}
+            />
           ))}
         </section>
       )}

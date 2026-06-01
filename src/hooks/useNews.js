@@ -1,7 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { fetchNews } from '../utils/api';
+import { fetchNews, fetchLatestNews } from '../utils/api';
 
-const useNews = (filters) => {
+// mode: 'news' (default archive) | 'latest' (breaking) — selects the NewsData.io endpoint.
+const useNews = (filters, mode = 'news') => {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -12,7 +13,8 @@ const useNews = (filters) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchNews({
+      const fetcher = mode === 'latest' ? fetchLatestNews : fetchNews;
+      const data = await fetcher({
         ...filters,
         page: pageToken,
       });
@@ -26,14 +28,14 @@ const useNews = (filters) => {
     } finally {
       setLoading(false);
     }
-  }, [filters]);  // eslint-disable-line
+  }, [filters, mode]);  // eslint-disable-line
 
   useEffect(() => {
     setArticles([]);
     setNextPage(null);
     setHasMore(true);
     loadNews(true);
-  }, [filters.language, filters.category, filters.country, filters.query]); // eslint-disable-line
+  }, [filters.language, filters.category, filters.country, filters.query, mode]); // eslint-disable-line
 
   const loadMore = () => {
     if (!loading && hasMore && nextPage) {

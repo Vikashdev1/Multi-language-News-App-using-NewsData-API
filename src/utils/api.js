@@ -20,12 +20,13 @@ export const fetchNews = async ({ language = 'en', category = '', query = '', co
   return response.data;
 };
 
-export const fetchLatestNews = async ({ language = 'en', category = '', query = '', country = '' } = {}) => {
+export const fetchLatestNews = async ({ language = 'en', category = '', query = '', country = '', page = null } = {}) => {
   const params = {};
   if (language) params.language = language;
   if (category) params.category = category;
   if (query) params.q = query;
   if (country) params.country = country;
+  if (page) params.page = page;
 
   const response = await api.get('/latest', { params });
   return response.data;

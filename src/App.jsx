@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Header from './components/Header';
 import CategoryBar from './components/CategoryBar';
 import NewsGrid from './components/NewsGrid';
@@ -11,7 +11,8 @@ import { SkeletonGrid } from './components/SkeletonCard';
 import useNews from './hooks/useNews';
 import useTheme from './hooks/useTheme';
 import useDebounce from './hooks/useDebounce';
-import { LANGUAGES, CATEGORIES, COUNTRIES } from './utils/constants';
+import useBookmarks from './hooks/useBookmarks';
+import { LANGUAGES, CATEGORIES, COUNTRIES, RTL_LANGUAGES } from './utils/constants';
 import './App.css';
 
 const HAS_API_KEY = !!process.env.REACT_APP_NEWSDATA_API_KEY;
@@ -22,8 +23,17 @@ function App() {
   const [category, setCategory] = useState('');
   const [country, setCountry] = useState('');
   const [searchInput, setSearchInput] = useState('');
+  const [mode, setMode] = useState('news');
+  const [showSaved, setShowSaved] = useState(false);
+
+  const { bookmarks, isBookmarked, toggleBookmark } = useBookmarks();
 
   const query = useDebounce(searchInput, 600);
+
+  // Right-to-left languages (Arabic, Urdu, …) flip the whole document direction.
+  useEffect(() => {
+    document.documentElement.dir = RTL_LANGUAGES.includes(language) ? 'rtl' : 'ltr';
+  }, [language]);
 
   const filters = useMemo(() => ({
     language,
@@ -32,7 +42,9 @@ function App() {
     query,
   }), [language, category, country, query]);
 
-  const { articles, loading, error, hasMore, loadMore } = useNews(filters);
+  const { articles: fetchedArticles, loading, error, hasMore, loadMore } = useNews(filters, mode);
+
+  const articles = showSaved ? bookmarks : fetchedArticles;
 
   const handleClearFilters = () => {
     setCategory('');
@@ -40,8 +52,8 @@ function App() {
     setSearchInput('');
   };
 
-  const showSkeleton = loading && articles.length === 0;
-  const showEmpty = !loading && !error && articles.length === 0;
+  const showSkeleton = !showSaved && loading && articles.length === 0;
+  const showEmpty = showSaved ? bookmarks.length === 0 : (!loading && !error && articles.length === 0);
   const showGrid = articles.length > 0;
 
   return (
@@ -65,6 +77,11 @@ function App() {
         country={country}
         onCountryChange={setCountry}
         countries={COUNTRIES}
+        mode={mode}
+        onModeChange={setMode}
+        showSaved={showSaved}
+        onToggleSaved={() => setShowSaved(s => !s)}
+        savedCount={bookmarks.length}
       />
 
       <main className="app__main">
@@ -78,7 +95,7 @@ function App() {
             categories={CATEGORIES}
           />
 
-          {error && (
+          {!showSaved && error && (
             <ErrorState message={error} onRetry={() => window.location.reload()} />
           )}
 
@@ -93,9 +110,11 @@ function App() {
           {showGrid && (
             <NewsGrid
               articles={articles}
-              hasMore={hasMore}
+              hasMore={!showSaved && hasMore}
               loadMore={loadMore}
               loading={loading}
+              isBookmarked={isBookmarked}
+              onToggleBookmark={toggleBookmark}
             />
           )}
         </div>

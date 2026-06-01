@@ -21,6 +21,9 @@ export const LANGUAGES = [
   { code: 'ur', label: 'اردو', flag: '🇵🇰' },
 ];
 
+// Languages that render right-to-left. Used to set dir="rtl" on the document.
+export const RTL_LANGUAGES = ['ar', 'ur', 'he', 'fa'];
+
 export const CATEGORIES = [
   { id: '', label: 'All News', icon: '🌐' },
   { id: 'top', label: 'Top Stories', icon: '⚡' },

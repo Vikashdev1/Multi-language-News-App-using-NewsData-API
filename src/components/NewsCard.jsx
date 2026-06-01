@@ -11,7 +11,20 @@ const ExternalIcon = () => (
   </svg>
 );
 
-const NewsCard = ({ article, index, featured = false }) => {
+const BookmarkIcon = ({ filled }) => (
+  <svg width="15" height="15" viewBox="0 0 24 24" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+  </svg>
+);
+
+// NewsData.io returns a `sentiment` field (positive/negative/neutral) on paid plans.
+const SENTIMENT_META = {
+  positive: { label: 'Positive', color: '#22c55e', icon: '▲' },
+  negative: { label: 'Negative', color: '#ef4444', icon: '▼' },
+  neutral: { label: 'Neutral', color: '#94a3b8', icon: '■' },
+};
+
+const NewsCard = ({ article, index, featured = false, isBookmarked = false, onToggleBookmark }) => {
   const [imgError, setImgError] = useState(false);
 
   const timeAgo = article.pubDate
@@ -35,6 +48,16 @@ const NewsCard = ({ article, index, featured = false }) => {
 
   const catColor = categoryColor[article.category?.[0]] || '#3b82f6';
 
+  const sentiment = SENTIMENT_META[article.sentiment];
+  const aiTag = Array.isArray(article.ai_tag) ? article.ai_tag[0] : article.ai_tag;
+  const keywords = (article.keywords || []).slice(0, 2);
+
+  const handleBookmark = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onToggleBookmark?.(article);
+  };
+
   return (
     <a
       href={article.link}
@@ -55,6 +78,16 @@ const NewsCard = ({ article, index, featured = false }) => {
         {article.category?.[0] && (
           <span className="card__category">{article.category[0]}</span>
         )}
+        {onToggleBookmark && (
+          <button
+            className={`card__bookmark ${isBookmarked ? 'card__bookmark--active' : ''}`}
+            onClick={handleBookmark}
+            aria-label={isBookmarked ? 'Remove bookmark' : 'Save article'}
+            title={isBookmarked ? 'Remove from saved' : 'Save for later'}
+          >
+            <BookmarkIcon filled={isBookmarked} />
+          </button>
+        )}
       </div>
 
       <div className="card__body">
@@ -69,6 +102,23 @@ const NewsCard = ({ article, index, featured = false }) => {
 
         {featured && article.description && (
           <p className="card__desc">{article.description?.slice(0, 140)}…</p>
+        )}
+
+        {(sentiment || aiTag || keywords.length > 0) && (
+          <div className="card__tags">
+            {sentiment && (
+              <span
+                className="card__chip card__chip--sentiment"
+                style={{ '--chip-color': sentiment.color }}
+              >
+                {sentiment.icon} {sentiment.label}
+              </span>
+            )}
+            {aiTag && <span className="card__chip">{aiTag}</span>}
+            {keywords.map(kw => (
+              <span key={kw} className="card__chip card__chip--keyword">#{kw}</span>
+            ))}
+          </div>
         )}
 
         <div className="card__meta">

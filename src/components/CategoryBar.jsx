@@ -1,7 +1,10 @@
 import React, { useRef } from 'react';
 import './CategoryBar.css';
 
-const CategoryBar = ({ categories, selected, onSelect, country, onCountryChange, countries }) => {
+const CategoryBar = ({
+  categories, selected, onSelect, country, onCountryChange, countries,
+  mode, onModeChange, showSaved, onToggleSaved, savedCount = 0,
+}) => {
   const scrollRef = useRef(null);
 
   const scroll = (dir) => {
@@ -38,6 +41,26 @@ const CategoryBar = ({ categories, selected, onSelect, country, onCountryChange,
         </button>
 
         <div className="catbar__divider" />
+
+        <button
+          className={`catbar__toggle ${mode === 'latest' ? 'catbar__toggle--active' : ''}`}
+          onClick={() => onModeChange?.(mode === 'latest' ? 'news' : 'latest')}
+          title="Show latest breaking news (NewsData.io /latest endpoint)"
+        >
+          <span className="catbar__toggle-pulse" />
+          Breaking
+        </button>
+
+        <button
+          className={`catbar__toggle ${showSaved ? 'catbar__toggle--active' : ''}`}
+          onClick={onToggleSaved}
+          title="Show saved articles"
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill={showSaved ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
+          </svg>
+          Saved{savedCount > 0 ? ` (${savedCount})` : ''}
+        </button>
 
         <div className="catbar__country">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
