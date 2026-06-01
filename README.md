@@ -9,8 +9,12 @@ A modern, fully responsive React news application powered by [NewsData.io](https
 ## ✨ Features
 
 - 🌐 **20 Languages** — English, Hindi, Arabic, French, German, Spanish, Chinese, Japanese, Korean, Russian, and more
+- 🔁 **RTL Support** — Layout automatically flips to right-to-left for Arabic, Urdu, and other RTL languages
 - 📂 **13+ Categories** — Top Stories, Business, Technology, Science, Health, Sports, Entertainment, Politics, Environment, Food, Travel, World
 - 🌎 **Country Filter** — Filter news by 15 countries including US, UK, India, Germany, Japan, China, Brazil, and more
+- ⚡ **Breaking News Toggle** — Switch between the archive (`/news`) and latest breaking (`/latest`) endpoints
+- 🔖 **Saved Articles** — Bookmark stories to a personal reading list, persisted in `localStorage`
+- 🧠 **Sentiment & AI Tags** — Sentiment chips and AI tag / keyword chips powered by NewsData.io's enrichment fields (paid plans)
 - 🔍 **Live Search** — Debounced full-text search across all articles
 - ♾️ **Infinite Pagination** — Load more stories using NewsData.io's pagination tokens
 - 🌙 **Dark / Light Theme** — Persisted via `localStorage`
